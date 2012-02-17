@@ -2,7 +2,7 @@ package randomwhackycards;
 
 /**
  * *****************************
- * 12/6/11 commit by Vic *****************************
+ * 12/6/11 commit by Vic ****************************
  */
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -17,7 +17,7 @@ import javax.swing.*;
 
 public class Main implements Runnable, ActionListener, MouseListener
 {
-    
+
     private int width = Toolkit.getDefaultToolkit().getScreenSize().width;
     private int height = Toolkit.getDefaultToolkit().getScreenSize().height;
     public JFrame cardWindow;
@@ -25,8 +25,7 @@ public class Main implements Runnable, ActionListener, MouseListener
     private int cardSize = 4;
     private int jillScore;
     private int jackScore;
-//    public WhackyButton jack;
-    public int winningScore = 400;
+    public int winningScore = 500;
     public int[][] intArray;
     public JButton[][] buttonArray;
     public Random r;
@@ -34,13 +33,15 @@ public class Main implements Runnable, ActionListener, MouseListener
     private Icon marioPic;
     private URL iconAddress;
     private Timer timer;
+    private int row;
+    private int col;
     private int presentNumber;
-    
+
     public static void main(String[] args)
     {
         SwingUtilities.invokeLater(new Main());
     }
-    
+
     @Override
     public void run()
     {
@@ -56,26 +57,36 @@ public class Main implements Runnable, ActionListener, MouseListener
         cardWindow.setVisible(true);//set visible
         cardWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//make it able to close
         cardWindow.setLayout(new GridLayout(cardSize, cardSize));
-        
-        for (int row = 0; row < cardSize; row++)
+        int tempr = r.nextInt(3);
+        int tempc = r.nextInt(3);
+
+        for (row = 0; row < cardSize; row++)
         {
-            for (int col = 0; col < cardSize; col++)
+            for (col = 0; col < cardSize; col++)
             {
-                j = new JButton(marioPic);
-                j.setMnemonic(r.nextInt(100));
-                cardWindow.add(j);
-                j.addMouseListener(this);
-                j.setFont(new Font("Bank Gothic", Font.BOLD, 90));
-                int tempr = r.nextInt(3);
-                if (row == tempr)
+                buttonArray[row][col] = new JButton(marioPic);
+                buttonArray[row][col].setMnemonic(r.nextInt(100));
+                cardWindow.add(buttonArray[row][col]);
+                buttonArray[row][col].addMouseListener(this);
+                buttonArray[row][col].setFont(new Font("Bank Gothic", Font.BOLD, 90));
+            }
+        }
+        for (row = 0; row < cardSize; row++)
+        {
+            for (col = 0; col < cardSize; col++)
+            {
+                if (tempr > tempc)
                 {
-                    intArray[row][tempr] = r.nextInt(5);
-                    j.setMnemonic((int)(Math.random() * 100) + 100);
+                    buttonArray[tempr][col].setMnemonic(r.nextInt(201));
+                }
+                if (tempc > tempr)
+                {
+                    buttonArray[row][tempc].setMnemonic(r.nextInt(201));
                 }
             }
         }
     }
-    
+
     public void updateScore(int n)
     {
         clicks++;
@@ -109,21 +120,23 @@ public class Main implements Runnable, ActionListener, MouseListener
             JOptionPane.showMessageDialog(null, "Draw no one won. Jill was winning by " + (jillScore - jackScore));
             System.exit(0);
         }
+        if (clicks == 16 && jillScore == jackScore)
+        {
+            JOptionPane.showMessageDialog(null, "Draw no one won.  Score was " + (jillScore));
+            System.exit(0);
+        }
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent ae)
     {
-        timer.stop();
-        presentNumber = 0;
-        j.setText("");
     }
-    
+
     @Override
     public void mouseClicked(MouseEvent me1)
     {
     }
-    
+
     @Override
     public void mousePressed(MouseEvent me2)
     {
@@ -137,20 +150,20 @@ public class Main implements Runnable, ActionListener, MouseListener
             temp.setFont(new Font("Ariel", Font.BOLD, 99));
             temp.setText("" + temp.getMnemonic());
             updateScore(temp.getMnemonic());
-            timer.start();
+
         }
     }
-    
+
     @Override
     public void mouseReleased(MouseEvent me3)
     {
     }
-    
+
     @Override
     public void mouseEntered(MouseEvent me4)
     {
     }
-    
+
     @Override
     public void mouseExited(MouseEvent me5)
     {
