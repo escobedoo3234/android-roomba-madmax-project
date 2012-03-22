@@ -4,6 +4,8 @@ package randomwhackycards;
  * *****************************
  * 12/6/11 commit by Vic ****************************
  */
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -36,6 +38,10 @@ public class Main implements Runnable, ActionListener, MouseListener
     private int row;
     private int col;
     private int presentNumber;
+    public URL endingSoundAdress;
+    public AudioClip endingSoundFile;
+    public URL endingSoundAdress2;
+    public AudioClip endingSoundFile2;
 
     public static void main(String[] args)
     {
@@ -59,6 +65,10 @@ public class Main implements Runnable, ActionListener, MouseListener
         cardWindow.setLayout(new GridLayout(cardSize, cardSize));
         int tempr = r.nextInt(3);
         int tempc = r.nextInt(3);
+        endingSoundAdress = getClass().getResource("fanfare2.aiff");//Add sounds
+        endingSoundFile = Applet.newAudioClip(endingSoundAdress);
+        endingSoundAdress2 = getClass().getResource("buzzer_x.aiff");//Add sounds
+        endingSoundFile2 = Applet.newAudioClip(endingSoundAdress2);
 
         for (row = 0; row < cardSize; row++)
         {
@@ -102,11 +112,13 @@ public class Main implements Runnable, ActionListener, MouseListener
         }
         if (jackScore > winningScore)
         {
+            endingSoundFile.play();
             JOptionPane.showMessageDialog(null, "Jack Wins!!" + "jack got " + jackScore + "  ,jill only got " + jillScore);
             System.exit(0);
         }
         if (jillScore > winningScore)
         {
+            endingSoundFile.play();
             JOptionPane.showMessageDialog(null, "Jill Wins!!" + " jill got " + jillScore + "  ,jack only got " + jackScore);
             System.exit(0);
         }
@@ -117,11 +129,13 @@ public class Main implements Runnable, ActionListener, MouseListener
         }
         if (clicks == 16 && jillScore > jackScore)
         {
+             endingSoundFile2.play();
             JOptionPane.showMessageDialog(null, "Draw no one won. Jill was winning by " + (jillScore - jackScore));
             System.exit(0);
         }
         if (clicks == 16 && jillScore == jackScore)
         {
+             endingSoundFile2.play();
             JOptionPane.showMessageDialog(null, "Draw no one won.  Score was " + (jillScore));
             System.exit(0);
         }
